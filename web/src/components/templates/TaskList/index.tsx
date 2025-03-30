@@ -11,6 +11,7 @@ import { TaskAddModal } from '../TaskAddModal'
 import useToggle from '@/hooks/useToggle'
 import { TaskDeleteModal } from '../TaskDeleteModal'
 import { useState } from 'react'
+import { useHooks } from './hooks'
 
 export type AlertState = {
   message: string
@@ -20,25 +21,23 @@ export type AlertState = {
 
 
 export const TaskList = () => {
-  const [selectedTask, setSelectedTask] = useState<Task | null>(null)
+  const {
+    selectedTask,
+    tasks,
+    loading,
+    error,
+    refetchTasks,
+    categories,
+    handleOpenForm,
+    handleCloseForm,
+    openForm,
+    handleOpenDelete,
+    handleCloseDeleteModal,
+    openDeleteModal,
+    refetchData,
+  } = useHooks()
 
-  const { tasks, loading, error, refetchTasks } = useGetTasks()
-  const { categories, refetchCategories } = useGetCategories()
-
-  const { bool: openForm, on: handleOpenForm, off: handleCloseForm } = useToggle()
-  const { bool: openDeleteModal, on: handleOpenDeleteModal, off: handleCloseDeleteModal } = useToggle()
-
-  const refetchData = () => {
-    refetchTasks()
-    refetchCategories()
-  }
-
-  const handleOpenDelete = (task: Task) => {
-    setSelectedTask(task)
-    handleOpenDeleteModal()
-  }
-
-  if (loading) return null // todo add loading
+  if (loading) return null
   if (error) return <Alert severity="error">{error}</Alert>
 
   return (

@@ -15,8 +15,9 @@ import Chip from '@mui/material/Chip'
 import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
+import { useHooks } from './hooks'
 
-interface TaskItemProps {
+export interface TaskItemProps {
   task: Task
   onDelete: () => void
 }
@@ -26,31 +27,17 @@ export const TaskItem = ({ task, onDelete }: TaskItemProps) => {
     id,
     name,
     priority,
-    due_date,
-    categories,
-    subtasks,
-    is_completed: defaultIsCompleted,
   } = task
-  const completedSubtasksCount = subtasks?.filter((s) => s.is_completed).length
-  const subtaskCount = subtasks?.length
-  const dueDate = formatDate(due_date)
-  const dateColor = due_date && new Date() >= new Date(due_date) ? 'error' : 'inherit'
-
-  const { bool: isCompleted, toggle: toggleChecked } =
-    useToggle(defaultIsCompleted)
-
-  const handleDelete = () => {
-    onDelete()
-  }
-
-  const toggleCompleted = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    try {
-      await toggleTaskCompletion(task.id)
-      toggleChecked()
-    } catch (e) {
-      console.error(e)
-    }
-  }
+  const {
+    completedSubtasksCount,
+    subtaskCount,
+    dueDate,
+    dateColor,
+    isCompleted,
+    categories,
+    handleDelete,
+    toggleCompleted,
+  } = useHooks({ task, onDelete })
 
   const getPriorityIcon = (priority: PRIORITY) => {
     switch (priority) {
@@ -82,8 +69,8 @@ export const TaskItem = ({ task, onDelete }: TaskItemProps) => {
             spacing={1}
           >
             <Checkbox
-            checked={isCompleted}
-            onChange={(e) => toggleCompleted(e)}
+              checked={isCompleted}
+              onChange={(e) => toggleCompleted(e)}
             />
             <Stack alignItems='flex-start'>
               <Link
