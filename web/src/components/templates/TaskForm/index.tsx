@@ -15,6 +15,7 @@ import Stack from '@mui/material/Stack'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 
+import useToggle from '@/hooks/useToggle'
 import { useEffect, useMemo, useState } from 'react'
 import {
   Controller,
@@ -23,6 +24,7 @@ import {
   useForm
 } from 'react-hook-form'
 import * as yup from 'yup'
+import { TaskDeleteModal } from '../TaskDeleteModal'
 
 interface TaskFormProps {
   categoryData: string[]
@@ -50,6 +52,7 @@ export const TaskForm = ({
   } = task ?? {}
 
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const { bool: openDeleteModal, on: handleOpenDeleteModal, off: handleCloseDeleteModal } = useToggle()
 
   const taskSchema = yup.object({
     name: yup.string().required('This field is required.'),
@@ -277,6 +280,14 @@ export const TaskForm = ({
           ))}
         </Stack>
         <Stack direction='row' spacing={1} justifyContent='flex-end' mt={3}>
+          {taskId ? (
+            <Button
+              variant='contained'
+              onClick={handleOpenDeleteModal}
+              color='error'
+            >
+              Delete
+            </Button>) : null}
           <Button
             variant='contained'
             type='submit'
@@ -288,6 +299,11 @@ export const TaskForm = ({
           </Button>
         </Stack>
       </FormProvider>
+      <TaskDeleteModal
+        open={openDeleteModal}
+        handleClose={handleCloseDeleteModal}
+        task={task}
+      />
     </Stack>
   )
 }
