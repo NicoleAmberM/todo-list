@@ -1,16 +1,14 @@
 
+import { Task } from '@/api'
 import AddIcon from '@mui/icons-material/Add'
 import { Alert } from '@mui/material'
 import Button from '@mui/material/Button'
 import Container from '@mui/material/Container'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { TaskItem } from '../TaskItem'
-import { Task, useGetCategories, useGetTasks } from '@/api'
 import { TaskAddModal } from '../TaskAddModal'
-import useToggle from '@/hooks/useToggle'
 import { TaskDeleteModal } from '../TaskDeleteModal'
-import { useState } from 'react'
+import { TaskItem } from '../TaskItem'
 import { useHooks } from './hooks'
 
 export type AlertState = {
@@ -83,7 +81,7 @@ export const TaskList = () => {
           refetch={refetchData}
           categoryData={categories}
         />
-         <TaskDeleteModal
+        <TaskDeleteModal
           open={openDeleteModal}
           handleClose={handleCloseDeleteModal}
           task={selectedTask}

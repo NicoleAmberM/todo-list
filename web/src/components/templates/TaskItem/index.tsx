@@ -1,6 +1,5 @@
-import { Task, toggleTaskCompletion } from '@/api'
-import useToggle from '@/hooks/useToggle'
-import { formatDate, PRIORITY } from '@/lib/utils'
+import { Task } from '@/api'
+import { PRIORITY } from '@/lib/utils'
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
 import ChecklistIcon from '@mui/icons-material/Checklist'
 import DeleteIcon from '@mui/icons-material/Delete'
