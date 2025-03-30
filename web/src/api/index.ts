@@ -90,3 +90,44 @@ export const useGetTask = (id?: string) => {
 
   return { task, loading, error, refetchTask: fetchTask }
 }
+
+export const useGetCategories = () => {
+  const [categories, setCategories] = useState<string[]>([])
+  const [loading, setLoading] = useState<boolean>(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const fetchCategories = async () => {
+    setLoading(true)
+    try {
+      const response = await API.get('categories/')
+      setCategories(response.data)
+      setError(null)
+    } catch (error: any) {
+      setError('Failed to fetch tasks.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchCategories()
+  }, [])
+
+  return { categories, loading, error, refetchCategories: fetchCategories }
+}
+
+export const createTask = async (taskData: TaskForCreate) => {
+  try {
+    await API.post('tasks/', taskData)
+  } catch(error) {
+    throw error
+  }
+}
+
+export const updateTask = async (id: string, taskData: TaskForEdit) => {
+  try {
+    await API.put(`tasks/${id}/`, taskData)
+  } catch(error) {
+    throw error
+  }
+}

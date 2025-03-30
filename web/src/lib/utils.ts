@@ -12,3 +12,9 @@ export const formatDate = (date?: string | null) => {
     day: 'numeric',
   })
 }
+
+
+export const formatDateToYYYYMMDD = (date?: Date | string | null) => {
+  if (!date) return null
+  return new Date(date).toISOString().split('T')[0]
+}

@@ -74,6 +74,7 @@ export const TaskItem = ({ task }: TaskItemProps) => {
             spacing={1}
           >
             <Checkbox
+            // todo add new toggleChecked API
             />
             <Stack alignItems='flex-start'>
               <Link

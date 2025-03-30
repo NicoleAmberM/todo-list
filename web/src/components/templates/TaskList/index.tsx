@@ -6,7 +6,9 @@ import Container from '@mui/material/Container'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { TaskItem } from '../TaskItem'
-import { Task, useGetTasks } from '@/api'
+import { Task, useGetCategories, useGetTasks } from '@/api'
+import { TaskAddModal } from '../TaskAddModal'
+import useToggle from '@/hooks/useToggle'
 
 export type AlertState = {
   message: string
@@ -16,7 +18,15 @@ export type AlertState = {
 
 
 export const TaskList = () => {
-  const { tasks, loading, error } = useGetTasks()
+  const { tasks, loading, error, refetchTasks } = useGetTasks()
+  const { categories, refetchCategories } = useGetCategories()
+
+  const { bool: openForm, on: handleOpenForm, off: handleCloseForm } = useToggle()
+
+  const refetchData = () => {
+    refetchTasks()
+    refetchCategories()
+  }
 
   if (loading) return null // todo add loading
   if (error) return <Alert severity="error">{error}</Alert>
@@ -44,6 +54,7 @@ export const TaskList = () => {
           <Button
             variant="contained"
             startIcon={<AddIcon />}
+            onClick={handleOpenForm}
           >
             Add Task
           </Button>
@@ -56,6 +67,12 @@ export const TaskList = () => {
             />
           ))}
         </Stack>
+        <TaskAddModal
+          open={openForm}
+          handleClose={handleCloseForm}
+          refetch={refetchData}
+          categoryData={categories}
+        />
       </Stack>
     </Container>
   )
