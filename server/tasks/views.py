@@ -1,18 +1,23 @@
 from django.shortcuts import render
 
 from django.shortcuts import render
-from rest_framework import generics, status
+from rest_framework import generics, status, filters
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.utils import timezone
+from django_filters.rest_framework import DjangoFilterBackend
 
 from .models import Task, Category
 from .serializers import TaskSerializer, CategorySerializer
 
 
 class TaskListCreateView(generics.ListCreateAPIView):
-    queryset = Task.objects.all().order_by('-created_at')
+    queryset = Task.objects.all()
     serializer_class = TaskSerializer
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
+    filterset_fields = ['priority', 'is_completed']
+    ordering_fields = ['created_at', 'due_date', 'completed_date', 'priority']
+    ordering = ['-created_at']
 
 
 class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
