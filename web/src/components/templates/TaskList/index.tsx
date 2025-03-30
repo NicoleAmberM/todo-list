@@ -9,6 +9,8 @@ import { TaskItem } from '../TaskItem'
 import { Task, useGetCategories, useGetTasks } from '@/api'
 import { TaskAddModal } from '../TaskAddModal'
 import useToggle from '@/hooks/useToggle'
+import { TaskDeleteModal } from '../TaskDeleteModal'
+import { useState } from 'react'
 
 export type AlertState = {
   message: string
@@ -18,14 +20,22 @@ export type AlertState = {
 
 
 export const TaskList = () => {
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null)
+
   const { tasks, loading, error, refetchTasks } = useGetTasks()
   const { categories, refetchCategories } = useGetCategories()
 
   const { bool: openForm, on: handleOpenForm, off: handleCloseForm } = useToggle()
+  const { bool: openDeleteModal, on: handleOpenDeleteModal, off: handleCloseDeleteModal } = useToggle()
 
   const refetchData = () => {
     refetchTasks()
     refetchCategories()
+  }
+
+  const handleOpenDelete = (task: Task) => {
+    setSelectedTask(task)
+    handleOpenDeleteModal()
   }
 
   if (loading) return null // todo add loading
@@ -64,6 +74,7 @@ export const TaskList = () => {
             <TaskItem
               key={task.id}
               task={task}
+              onDelete={() => handleOpenDelete(task)}
             />
           ))}
         </Stack>
@@ -73,6 +84,11 @@ export const TaskList = () => {
           refetch={refetchData}
           categoryData={categories}
         />
+         <TaskDeleteModal
+          open={openDeleteModal}
+          handleClose={handleCloseDeleteModal}
+          task={selectedTask}
+          refetch={refetchTasks} />
       </Stack>
     </Container>
   )

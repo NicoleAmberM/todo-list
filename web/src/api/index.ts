@@ -131,3 +131,12 @@ export const updateTask = async (id: string, taskData: TaskForEdit) => {
     throw error
   }
 }
+
+export const deleteTask = async (id: string) => {
+  try {
+    await API.delete(`tasks/${id}/`)
+  } catch(error) {
+    throw error
+  }
+}
+

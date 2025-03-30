@@ -18,9 +18,10 @@ import Typography from '@mui/material/Typography'
 
 interface TaskItemProps {
   task: Task
+  onDelete: () => void
 }
 
-export const TaskItem = ({ task }: TaskItemProps) => {
+export const TaskItem = ({ task, onDelete }: TaskItemProps) => {
   const {
     id,
     name,
@@ -40,8 +41,7 @@ export const TaskItem = ({ task }: TaskItemProps) => {
     useToggle(defaultIsCompleted)
 
   const handleDelete = () => {
-    // todo use deleteApi
-    console.log('Delete')
+    onDelete()
   }
 
   const getPriorityIcon = (priority: PRIORITY) => {
