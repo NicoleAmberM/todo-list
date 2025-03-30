@@ -140,3 +140,10 @@ export const deleteTask = async (id: string) => {
   }
 }
 
+export const toggleTaskCompletion = async (id: string) => {
+  try {
+    await API.patch(`tasks/${id}/toggle/`)
+  } catch(error) {
+    throw error
+  }
+}

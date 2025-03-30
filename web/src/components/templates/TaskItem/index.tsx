@@ -1,4 +1,4 @@
-import { Task } from '@/api'
+import { Task, toggleTaskCompletion } from '@/api'
 import useToggle from '@/hooks/useToggle'
 import { formatDate, PRIORITY } from '@/lib/utils'
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
@@ -36,12 +36,20 @@ export const TaskItem = ({ task, onDelete }: TaskItemProps) => {
   const dueDate = formatDate(due_date)
   const dateColor = due_date && new Date() >= new Date(due_date) ? 'error' : 'inherit'
 
-  // todo use editApi for toggleChecked
   const { bool: isCompleted, toggle: toggleChecked } =
     useToggle(defaultIsCompleted)
 
   const handleDelete = () => {
     onDelete()
+  }
+
+  const toggleCompleted = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    try {
+      await toggleTaskCompletion(task.id)
+      toggleChecked()
+    } catch (e) {
+      console.error(e)
+    }
   }
 
   const getPriorityIcon = (priority: PRIORITY) => {
@@ -74,7 +82,8 @@ export const TaskItem = ({ task, onDelete }: TaskItemProps) => {
             spacing={1}
           >
             <Checkbox
-            // todo add new toggleChecked API
+            checked={isCompleted}
+            onChange={(e) => toggleCompleted(e)}
             />
             <Stack alignItems='flex-start'>
               <Link
