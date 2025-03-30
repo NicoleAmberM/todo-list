@@ -1,0 +1,9 @@
+# Django
+__pycache__/
+db.sqlite3
+*.pyc
+*.pyo
+*.pyd
+migrations/**/__pycache__
+Pipfile.lock
+.env
